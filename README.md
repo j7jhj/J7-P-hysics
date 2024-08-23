@@ -1,2 +1,2 @@
 # J7-P-hysics
-Engineering project I did. Instructions are included in the program.
+Simple program I worked on for engineering. Instructions are included in the program.
