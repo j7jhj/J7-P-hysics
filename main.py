@@ -28,7 +28,7 @@ def UnitSelection():
         Units.update({'foot': False, "yard": False, "inch": False, "centimeter": False, "meter": False})
         Units[UnitSelectionInput] = True
 
-def EliasDoesntKnowTruePeak():
+def Calculation():
   global UnitSelectionInput
   #X, Y, and Z inputs
   InputX = int(input("\nX: "))
@@ -40,7 +40,7 @@ def EliasDoesntKnowTruePeak():
   Velocity = ((DeplaceAdd) / (TimeInput))
 
 
-  def unitCacultion():
+  def unitCalcultion():
     if Units['foot'] == True:
         Displacement = (DeplaceAdd * 3.28084)
 
@@ -66,7 +66,7 @@ def EliasDoesntKnowTruePeak():
 
         print(f"\nYour displacement is {Displacement} meter(s) and your Velocity is {Velocity} m/s")
 
-  unitCacultion()
+  unitCalcultion()
 
   Exit()
 
@@ -80,7 +80,7 @@ while True:
 
   match MenuInput.lower():
     case "c":
-      EliasDoesntKnowTruePeak()
+      Calculation()
 
     case "us":
       UnitSelection()
