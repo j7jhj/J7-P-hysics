@@ -1,15 +1,41 @@
 import os
 import math
+import decimal
+from decimal import Decimal, getcontext
+import Characters
+from Characters import J7PhysicsLogo
 
-# CHECKLIST: Caculate displacement/velocity, unit selection, decorate
-# Math things needed: math.atan(), math.cos(), math.sin()
+# Things necessary for the code
+getcontext().prec = 50
+SelectedUnit = "meter"
 
+# Units Nested Dictionary
 Units = {
-    "foot": False,
-    "yard": False,
-    "inch": False,
-    "centimeter": False,
-    "meter": True,
+    "foot": {
+      "name": "foot",
+      "active": False,
+      "value": 0.3048
+    },
+    "yard": {
+      "name": "yard(s)",
+      "active": False,
+      "value": 0.9144
+    },
+    "inch": {
+      "name": "inch(es)",
+      "active": False,
+      "value": 0.0254
+    },
+    "centimeter": {
+      "name": "centimeter(s)",
+      "active": False,
+      "value": 0.01
+    },
+    "meter": {
+      "name": "meter(s)",
+      "active": True,
+      "value": 1
+    },
 }
 
 def Exit():
@@ -17,72 +43,82 @@ def Exit():
   ExitInput = input("\nType anything to leave")
   os.system('clear') 
 
+def Instructions():
+  # Instructions on how to use the program
+  os.system('clear')
+  print("Welcome to J7Physics! These are the basic instructions/information you will need to know to use it"), '\n', print("\n1. This converts the x1, x2, y1, and y2 and both angles of your desired 2 triangles."), '\n', print("\n2. Selecting a specific unit ONLY converts the resultant into that specific unit."), '\n', print("\n3. The default unit is meters and you must input your x1, x2, y1, and y2 in meters. ")
+  Exit()
+
 def UnitSelection():
     # Unit selection
+    global SelectedUnit
+
     os.system('clear')
-    print("\nCONVERTED UNIT SELECTIONS: \nFoot | Yard | Inch | Centimeter | Meter")
+    print("\nCONVERTED RESULTANT UNIT SELECTIONS: \nFoot | Yard | Inch | Centimeter | Meter")
 
     UnitSelectionInput = input("\nInput desired unit: ").lower()
+    SelectedUnit = str(UnitSelectionInput)
 
-    if UnitSelectionInput is not None:
-        Units.update({'foot': False, "yard": False, "inch": False, "centimeter": False, "meter": False})
-        Units[UnitSelectionInput] = True
+    if UnitSelectionInput in Units:
+      for unit in Units:
+          Units[unit]['active'] = False
 
-def Calculation():
-  global UnitSelectionInput
+      Units[SelectedUnit]['active'] = True
+
+      SelectedUnit = UnitSelectionInput
+
+
+def Caculation():
+  #Function variables
+  global SelectedUnit
+  os.system('clear')
+  AngleLoop = True
+
   #X, Y, and Z inputs
-  InputX = int(input("\nX: "))
-  InputY = int(input("\nY: "))
-  TimeInput = int(input("\nTime: "))
+  InputX1 = float(input("\nx1: "))
+  InputX2 = float(input("\nx2: "))
+  Inputy1 = float(input("\ny1: "))
+  Inputy2 = float(input("\ny2: "))
+  
+  Angle1Input = float(input("\n1st Angle: "))
+  Angle2Input = float(input("\n2nd Angle: "))
 
-  DeplaceAdd = (((InputX) ** 2) + ((InputY** 2)))**0.5
+  MagnitudeSolution = ((InputX1) ** 2 + (Inputy1) ** 2)**0.5
+  MagnitudeSolution2 = ((InputX2) ** 2 + (Inputy2) ** 2)**0.5
+  # Finding the resultant
+  Rx = InputX1 + InputX2
+  Ry = Inputy1 + Inputy2
 
-  Velocity = ((DeplaceAdd) / (TimeInput))
+  Resultant = ((Rx)**2 + (Ry)**2)**0.5
+
+  def UnitCalculation():
+    #Sub function that creates a message and prints it with the resultant and angle 
+    if Units[SelectedUnit]['active'] == True:
+      ResultantUnitConvert = (Resultant*(Units[SelectedUnit]['value']))
+
+      ResultantAngle = math.degrees(math.atan((Inputy1+Inputy2) / (InputX1+InputX2)))
 
 
-  def unitCalcultion():
-    if Units['foot'] == True:
-        Displacement = (DeplaceAdd * 3.28084)
+      print(f"\nYour Resultant is {ResultantUnitConvert} {Units[SelectedUnit]['name']} and the resultant angle is {ResultantAngle} degrees")
 
-        print(f"\nYour displacement is {Displacement} foot and your Velocity is {Velocity} m/s")
-
-    elif Units['yard'] == True:
-        Displacement = (DeplaceAdd * 1.0936133333333)
-
-        print(f"\nYour displacement is {Displacement} yard(s) and your Velocity is {Velocity} m/s")
-
-    elif Units['inch'] == True:
-        Displacement = (DeplaceAdd * 39.370079999998800702)
-
-        print(f"\nYour displacement is {Displacement} inch(es) and your Velocity is {Velocity} m/s")
-
-    elif Units['centimeter'] == True:
-        Displacement = (DeplaceAdd * 100.00000319999695364)
-
-        print(f"\nYour displacement is {Displacement} centimeter(s) and your Velocity is {Velocity} m/s")
-
-    elif Units['meter'] == True:
-        Displacement = (DeplaceAdd * 1)
-
-        print(f"\nYour displacement is {Displacement} meter(s) and your Velocity is {Velocity} m/s")
-
-  unitCalcultion()
+  UnitCalculation()
 
   Exit()
 
 while True:
   # Menu
   os.system('clear')
-  
-  print("Welcome to J7(P)hysics! | Ver. ALPHA"), '\n', print("(c): Caculate"), '\n', print("(us): Unit Selection")
+
+  print(J7PhysicsLogo),print("\n<------------------------------------------------------------>") ,'\n', print("'c': Calculate"), '\n', print("'us': Unit Settings"), '\n', print("'i': Instructions")
 
   MenuInput = input("\n[TYPE]>")
 
   match MenuInput.lower():
     case "c":
-      Calculation()
+      Caculation()
 
     case "us":
       UnitSelection()
 
-  
+    case "i":
+      Instructions()
